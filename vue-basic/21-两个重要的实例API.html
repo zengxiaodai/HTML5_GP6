@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <div v-for='item in list'>
+      <span v-text='item.id'></span>
+      --
+      <span v-text='item.name'></span>
+      --
+      <span v-text='item.info.age'></span>
+    </div>
+    <button @click='updateList'>更新列表</button>
+    <hr>
+    <button @click='appendHtml'>追加一段来自后端的HTML字符串</button>
+    <div v-html='content'></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // $fourceUpdate()
+    // 当复杂的响应式变量发生变化、但视图不更新时，调用它进行强制执行diff运算、更新视图。
+    // 大多数场景，还可以使用深拷贝方法进行处理。
+
+    // $nextTick(fn)
+    // 什么是Tick？当多个响应式变量发生变化时，Vue要执行一次diff运算，把这一系列的更新任务拆分成多个Tick来分别更新DOM。
+    // 使用场景：当一个声明式操作与DOM结构有关，并且我们需要在更新DOM之后同步操作这个DOM，那么这个API可以帮你实现。
+
+    var app = new Vue({
+      data: {
+        list: [
+          { id: 1, name: 'zhangsan-1', info: { age: 10 } },
+          { id: 2, name: 'zhangsan-2', info: { age: 20 } },
+          { id: 3, name: 'zhangsan-3', info: { age: 30 } }
+        ],
+        content: ''
+      },
+      methods: {
+        updateList() {
+          this.list.map((ele,idx)=>{
+            // do something
+            this.list[idx].info.age = this.list[idx].info.age*10
+          })
+          // 假如上述声明式操作导致数据确实发生了变化，但视图没有更新。怎么办？
+          // this.$fourceUpdate()
+          // this.list = JSON.parse(JSON.stringify())
+        },
+        appendHtml() {
+          this.content = `<div id='box'><h1>一段文字</h1></div>`
+          this.$nextTick(()=>{
+            var oBox = document.getElementById('box')
+            oBox.style.color = 'red'
+          })
+        }
+      },
+
+    })
+    app.$mount('#app')
+  </script>
+
+</body>
+</html>

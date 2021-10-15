@@ -1,0 +1,47 @@
+{
+    "pages": [        
+        "pages/find/find",
+        "pages/user/user",
+        "pages/shop/shop",        
+        "pages/shop_info/shop_info",
+        "pages/index/index"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarTitleText": "GP6",
+        "navigationBarTextStyle": "black",
+        "navigationStyle": "custom"
+    },
+    "style": "v2",
+    "sitemapLocation": "sitemap.json",
+    "tabBar": {
+        "color": "#808080",
+        "selectedColor": "#E33C49",
+        "backgroundColor": "#ffffff",
+        "list": [
+            {
+                "pagePath": "pages/find/find",
+                "text": "音乐",
+                "iconPath": "/assets/tabbar/find.png",
+                "selectedIconPath": "/assets/tabbar/find-on.png"
+            },
+            {
+                "pagePath": "pages/shop/shop",
+                "text": "店铺",
+                "iconPath": "/assets/tabbar/shop.png",
+                "selectedIconPath": "/assets/tabbar/shop-on.png"
+            },
+            {
+                "pagePath": "pages/user/user",
+                "text": "我的",
+                "iconPath": "/assets/tabbar/user.png",
+                "selectedIconPath": "/assets/tabbar/user-on.png"
+            }
+        ]
+    },
+    "permission": {
+        "scope.userLocation": {
+            "desc": "位置信息将用于为你推荐附近的商家"
+        }
+    }
+}

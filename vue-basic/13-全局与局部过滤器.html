@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    [v-cloak] { display: none; }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+    <h1 v-cloak>{{price | point | rmb}}</h1>
+    <h1 v-cloak :title='num | student'>{{num | student}}</h1>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+
+    // 全局过滤器
+    // 作用：用于文本类数据的格式化处理。举例：价格12456.879662，显示的需求是“$12 456.89”。
+    // 特点1：一次定义，在整个vue环境中都可以使用。
+    // 特点2：过滤器可以链式调用，有顺序的要求。顺序不同，结果也不同。
+    // 语法：过滤器只支持两个指令 v-bind、{{}}，别的指令都不支持。在vue3中它已经被废弃了。
+    // 注意：Vue.filter定义的全局过滤器和Vue.component定义的全局组件一样，都必须在new Vue()加载与编译。
+    Vue.filter('rmb', function(val) {
+      // do something
+      return '￥'+val
+    })
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        price: '1234.879766',
+        num: '202109892'
+      },
+      // 局部过滤器，只能在当前组件视图中使用，不能跨组件使用。
+      filters: {
+        'point': function(val) {
+          // do something
+          return Number(val).toFixed(2)
+        },
+        'student': function(val) {
+          // do something
+          return 'SZ'+val
+        }
+      }
+    })
+
+
+  </script>
+
+</body>
+</html>

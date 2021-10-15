@@ -1,0 +1,12 @@
+<view>
+
+<view bindtap="navTo">导航去店铺</view>
+<view bindtap="call">打咨询电话</view>
+
+<view>
+    <button open-type="share">
+        <image src='/assets/icon/share.png' />
+    </button>
+</view>
+
+</view>

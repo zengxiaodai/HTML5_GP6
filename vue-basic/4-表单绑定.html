@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <!-- 普通的文本框 -->
+    <div>
+      <span>用户名：</span>
+      <input type="text" v-model.trim='name' />
+    </div>
+    <div>
+      <span>密码：</span>
+      <input type="password" v-model.trim='pass' />
+    </div>
+    <!-- 多行文本框 -->
+    <div>
+      <span>个人简介：</span>
+      <textarea rows="2" cols="120" v-model.lazy='desc'></textarea>
+    </div>
+    <!-- 拾色器 -->
+    <div>
+      <span>幸运色：</span>
+      <input type="color" v-model='color' />
+    </div>
+    <hr>
+
+    <!-- 下拉框 -->
+    <div>
+      <span>选择学历：</span>
+      <!-- v-for，要循环哪个标签，就把v-for写在哪个标签上 -->
+      <select v-model='level'>
+        <option value=''>请选择学历</option>
+        <option
+          v-for='item in levelArr'
+          v-text='item.label'
+          :value='item.value'>
+        </option>
+      </select>
+    </div>
+    <hr>
+
+    <!-- checkbox复选框 -->
+    <!-- 怎么让彼此没有关联的checkbox变成一组呢？在vue中，使用v-model给它们绑定相同的声明式变量即可 -->
+    <!-- checkbox复选框的v-model所绑定的声明式变量必须是数组，这个数组是用于双向绑定（取值），所以要给每一个checkbox的input都加一个唯一的value值。 -->
+    <div>
+      <span>选择爱好：</span>
+      <span v-for='item in favArr'>
+        <input
+          :value='item.value'
+          v-model='fav'
+          type="checkbox"
+        />
+        <span v-text='item.label'></span>
+      </span>
+    </div>
+    <hr>
+
+    <!-- radio单选按钮组 -->
+    <!-- v-model用于把毫无关联的radio标签变成一组“单选按钮组” -->
+    <!-- v-model要绑定一个声明式变量，所以radio的input框要指定一个唯一的value值 -->
+    <div>
+      <span>选择性别：</span>
+      <span v-for='item in genderArr'>
+        <input
+          :value='item.value'
+          v-model='gender'
+          type="radio"
+        />
+        <span v-text='item.label'></span>
+      </span>
+    </div>
+    <hr>
+
+    <button @click='submit'>提交</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 表单绑定
+    // HTML5有哪些常用的表单？
+
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        name: '',
+        desc: '',
+        pass: '',
+        // 拾色器的初始值（格式化的字符串）
+        color: '#ff0000',
+        levelArr: [
+          { id: 1, value: 'a', label: '高中' },
+          { id: 2, value: 'b', label: '大专' },
+          { id: 3, value: 'c', label: '本科' },
+          { id: 4, value: 'd', label: '硕士' }
+        ],
+        level: '',
+        favArr: [
+          { id: 1, value: 'book', label: '读书' },
+          { id: 2, value: 'code', label: '编程' },
+          { id: 3, value: 'music', label: '音乐' },
+          { id: 4, value: 'basketball', label: '篮球' },
+          { id: 5, value: 'football', label: '足球' }
+        ],
+        fav: [],  // 它用于给一组checkbox绑值，所以必须是数组
+        genderArr: [
+          { id: 1, value: 'man', label:'男' },
+          { id: 2, value: 'female', label:'女' },
+          { id: 3, value: 'none', label:'未知' }
+        ],
+        gender: ''
+      },
+      methods: {
+        submit() {
+          const data = {
+            name: this.name,
+            desc: this.desc,
+            pass: this.pass,
+            color: this.color,
+            level: this.level,
+            fav: this.fav,
+            gender: this.gender
+          }
+          console.log('提交', data)
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

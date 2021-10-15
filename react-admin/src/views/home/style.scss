@@ -1,0 +1,52 @@
+.qf-home-editor {
+  &>div {
+    display: flex;
+    height: 300px;
+    .c1 {
+      background-color: white;
+      padding: 15px;
+      width: 100%;
+      height: 100%;
+      flex: 1;
+      margin-right: 10px;
+    }
+    .c2 {
+      background-color: white;
+      padding: 15px;
+      width: 100%;
+      height: 100%;
+      flex: 1;
+    }
+  }
+}
+
+.qf-home-admin {
+  position: absolute;
+  top: 15px;
+  right: 0;
+  left: 15px;
+  bottom: 15px;
+  overflow: hidden;
+  padding: 10px;
+  background-color: white;
+  padding-right: 160px;
+  .map {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  .form {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 150px;
+    background: #eee;
+    padding: 15px;
+    z-index: 9999;
+  }
+  .search {
+    padding-bottom: 20px;
+    &>.ant-input { width: 200px; }
+  }
+}

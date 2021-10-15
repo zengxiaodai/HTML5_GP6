@@ -1,0 +1,52 @@
+.qf-modal-layer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.6);
+  .modal {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    width: 520px;
+    margin-left: -260px;
+    background: white;
+    border-radius: 3px;
+    font-size: 14px;
+    .header {
+      height: 50px;
+      line-height: 50px;
+      border-bottom: 1px solid #ccc;
+      padding: 0 20px;
+      box-sizing: border-box;
+      overflow: hidden;
+      .close {
+        float: right;
+        cursor: pointer;
+      }
+    }
+    .body {
+      box-sizing: border-box;
+      padding: 20px;
+    }
+    .footer {
+      height: 50px;
+      border-top: 1px solid #ccc;
+      overflow: hidden;
+      padding-right: 20px;
+      span {
+        height: 30px;
+        float: right;
+        padding: 0 15px;
+        font-size: 12px;
+        margin-top: 10px;
+        border-radius: 3px;
+        border: 1px solid #ccc;
+        line-height: 28px;
+        margin-left: 20px;
+        cursor: pointer;
+      }
+    }
+  }
+}

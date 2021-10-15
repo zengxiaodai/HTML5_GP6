@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <qf-home></qf-home>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 全局混入
+    // 作用：是vue中逻辑复用的一种技巧。举例：埋点技术，电商埋点，记录用户访问爱好。
+    // 特点1：能够混入生命周期、methods、data、components、filters、directives等等。
+    // 特点2：局部混入的优先级高于全局混入，Vue组件自身选项的优先级又高于局部混入。
+
+    // 注意：全局混入，要写在new Vue()之前。
+
+    // 语法：这个选项参数，就是vue组件所支持的选项。
+    Vue.mixin({
+      data() {
+        return {
+          count: 50
+        }
+      },
+      mounted() {},
+      methods: {
+        sendFav() {
+          // 调接口把用户爱好发送至后端
+          // ajax({id,user_id})
+          console.log('调接口把用户爱好发送至后端')
+        }
+      }
+    })
+
+    // 局部混入
+    // 理解：它就是一个由vue组件选项所构成的一个普通对象。
+    // 特点：必须在组件中使用 mixins 这个选项手动混入。
+    var opt = {
+      data(){
+        return {
+          count: 100
+        }
+      },
+      created() { console.log('created') },
+      methods: {
+        dateHandle(arg) {
+          console.log('日期处理', arg)
+        }
+      }
+    }
+
+    Vue.component('qf-home', {
+      template: '<div>qf-home</div>',
+      data() {
+        return {
+          count: 200
+        }
+      },
+      // 局部混入（手动混入）
+      mixins: [opt],
+      mounted() {
+        this.sendFav()
+        console.log('home count', this.count)
+      }
+    })
+
+
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        count: 150
+      },
+      mounted() {
+        this.sendFav()
+        console.log('app count', this.count)
+      }
+    })
+  </script>
+
+</body>
+</html>

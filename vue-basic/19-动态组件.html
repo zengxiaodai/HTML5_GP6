@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .tabbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      display: flex;
+    }
+    .tabbar span {
+      flex: 1;
+      border: 1px solid #ccc;
+      line-height: 80px;
+      text-align: center;
+    }
+    .tabbar span.on {
+      background: orange;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div id='app'>
+    <!-- 凡是被<keep-alive>加载、包裹过的组件，永远不会“死” -->
+
+    <!-- is必须等于一个组件的名字 -->
+    <!-- 如果 is='qf-home'，这里将显示一个叫'qf-home'组件 -->
+    <keep-alive>
+      <component :is='`qf-${page}`'></component>
+    </keep-alive>
+
+    <!-- 建议使用事件委托 -->
+    <div class='tabbar' @click='switchTab'>
+      <span data-page='home' :class='{"on":page==="home"}'>首页</span>
+      <span data-page='find' :class='{"on":page==="find"}'>发现</span>
+      <span data-page='user' :class='{"on":page==="user"}'>我的</span>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 动态组件
+    // 作用：使用<keep-alive>/<component>这两个内置组件，保证其它自定义组件永远不被销毁。
+    // 在Vue应用程序，实现Tabbar切换页面，用的是单页面技术。根据路由系统对组件进行创建与销毁。
+    // 特点：凡是被<keep-alive>包裹的组件，具有了两个新的生命周期：
+    // activated 表示当前组件进入了前台（激活状态）
+    // deactivated 表示当前组件进入了后台（休眠状态）
+
+    // 类似这种Tab类型的组件的实现思路
+    // 1、v-if/v-else-if/v-else实现（移除、插入，耗费性能）
+    // 2、v-show 只在样式层面显示与隐藏，不太适合复杂的场景
+    // 3、一般实现Tab类型的组件，建议使用<component>这个内置组件来实现。
+
+    // <component>在实现组件切换时，也会导致组件的生与死。
+
+    Vue.component('qf-home', {
+      template: `
+      <div>
+        <h1>首页</h1>
+        <input type="text" v-model='msg' />
+      </div>
+      `,
+      data() {return {msg: ''}},
+      destroyed() { console.log('qf-home destroyed')},
+      activated() { console.log('qf-home 进入了前台')},
+      deactivated() { console.log('qf-home 进入了后台')}
+    })
+    Vue.component('qf-find', {
+      template: `
+      <div>
+        <h1>发现</h1>
+        <input type="text" v-model='msg' />
+      </div>
+      `,
+      data() {return {msg: ''}},
+      destroyed() { console.log('qf-find destroyed')},
+      activated() { console.log('qf-find 进入了前台')},
+      deactivated() { console.log('qf-find 进入了后台')}
+    })
+    Vue.component('qf-user', {
+      template: `
+      <div>
+        <h1>个人中心</h1>
+        <input type="text" v-model='msg' />
+      </div>
+      `,
+      data() {return {msg: ''}},
+      destroyed() { console.log('qf-user destroyed')},
+      activated() { console.log('qf-user 进入了前台')},
+      deactivated() { console.log('qf-user 进入了后台')}
+    })
+    var app = new Vue({
+      el: '#app',
+      data: {
+        idx: 1,
+        page: 'home'
+      },
+      methods: {
+        switchTab (e) {
+          this.page = e.target.dataset.page
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+/* pages/find/find.wxss */
+.find {
+    background: #F8F8F8;
+}
+
+.swiper-wrap {
+    width: 100%;
+    height: 528rpx;
+    position: relative;
+}
+.swiper {
+    width: 100%;
+    height: 528rpx;
+}
+.swiper image {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.dots {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: 38rpx;
+    text-align: center;
+}
+.dots text {
+    display: inline-block;
+    width: 10rpx;
+    height: 6rpx;
+    background: #FFFFFF;
+    border-radius: 3rpx;
+    opacity: 0.5;
+    margin: 16rpx 5rpx;
+}
+.dots text.on {
+    width: 22rpx;
+    background: white;
+}
+
+
+.search {
+    width: 100%;
+    height: 88rpx;
+    box-sizing: border-box;
+    padding: 14rpx 30rpx;
+    background: white;
+    position: relative;
+}
+.search input {
+    width: 609rpx;
+    background: #EFEFEF;
+    border-radius: 30rpx;
+    height: 60rpx;
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 60rpx;
+    box-sizing: border-box;
+
+
+    font-size: 26rpx;
+    font-weight: 400;
+    color: #353535;
+    line-height: 60rpx;
+}
+.search text {
+    font-size: 26rpx;
+    font-weight: 400;
+    color: #444444;
+    line-height: 60rpx;
+    display: inline-block;
+    text-align: right;
+    vertical-align: middle;
+    width: 81rpx;
+}
+.search image {
+    display: inline-block;
+    width: 28rpx;
+    height: 28rpx;
+    position: absolute;
+    left: 50rpx;
+    top: 30rpx;
+}
+
+
+.filter {
+    display: flex;
+    height: 80rpx;
+    line-height: 80rpx;    
+    color: #808080;
+    font-size: 26rpx;
+    text-align: center;
+    border-top:  1rpx solid #DDDDDD;
+    border-bottom:  1rpx solid #DDDDDD;
+    background-color: white;
+}
+.filter>view {
+    flex: 1;
+}
+picker {
+    display: inline-block;
+}
+.col image {
+    display: inline-block;
+    width: 20rpx;
+    height: 12rpx;
+    vertical-align: middle;
+    padding-left: 8rpx;
+}
+
+.music-list {
+    margin-top: 20rpx;
+}

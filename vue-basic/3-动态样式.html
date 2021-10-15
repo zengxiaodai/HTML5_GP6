@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .red { color: red; }
+    .green { color: green;}
+    .blue { color: blue;}
+    .f1 { font-size: 20px; }
+    .f2 { font-size: 30px; }
+    .f3 { font-size: 40px; }
+    .box { border: 1px solid #000; }
+    .hidden { display: none;}
+    .bg { background: #ccc; }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+    <!-- 动态属性（动态样式） -->
+    <!-- 动态样式和静态样式可以一起使用，但工作尽量避免。 -->
+    <!-- 动态样式因为需要vue compiler进行编译，所以加载较慢一点。 -->
+    <!-- 在下面这行代码中，:class对应的这个声明式变量必须是字符串（就是所谓的css类名） -->
+    <h1 :class='color' class='red'>我是一行文字</h1>
+    <hr>
+
+    <!-- 这种数组语法，可以同时使用多个动态的class类名 -->
+    <!-- 共识：数组语法实际上一个一个的表达式，要求每一个表达最后都返回一个class类名 -->
+    <h1 :class='[(color), (`f${font}`), ("box"), (show?"":"hidden"), createBgClass()]'>
+      测试class动态样式的数组语法
+    </h1>
+    <hr>
+
+    <!-- 这种对象语法，实际就是一组“键--值”对，“键”可以是写死的字符串，也可以是[]包裹的表达式，但要求“键”最后返回的是class类名。“值”必须是表达，最后要求返回布尔值。 -->
+    <h1 :class='{
+      [color]: true,
+      [`f${font}`]: true,
+      box: true,
+      hidden: !show,
+      [createBgClass()]: true
+    }'>
+      测试class动态样式的对象语法
+    </h1>
+    <hr>
+
+    <h1 :style='aStyle'>我是二行文字</h1>
+    <hr>
+
+    <!-- 这种数组语法中，每一个元素表达式最后都要求一个“css属性--css值”的键值对（对象） -->
+    <h1
+      :style='[
+        {opacity:0.5},
+        aStyle,
+        {border:`${borderWidth}px solid ${borderColor}`},
+        {[`padding-${paddingWho}`]: pt+"px"},
+        createStyle(100)
+      ]'
+    >
+      测试style动态样式的数组语法
+    </h1>
+    <hr>
+
+    <!-- 这种对象语法，左侧的key都返回css属性名，右侧的value都返回css属性值。 -->
+    <h1
+      :style='{
+        opacity: 0.5,
+        color: "red",
+        ["font-size"]: "40px",
+        backgroundColor: "#cccccc",
+        border:`${borderWidth}px solid ${borderColor}`,
+        [`padding-${paddingWho}`]: pt+"px",
+        ...createStyle()
+      }'
+    >
+      测试style动态样式的对象语法
+    </h1>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+
+    // 动态样式：元素的样式是随着交互而变化的。
+    // 语法基础：v-bind:class  v-bind:style
+    // :class='[]'，只要数组中的每个表达式最终返回的是class类名就可以了。
+    // :class='{}', 只要key返回的是class类名，value表达返回布尔值就可以了。
+
+    // :style='[]'  要求数组中的每个表达式最终都返回一个“css属性-css值”的键值对
+    // :style='{}'  对象的key，要求返回一个css属性名；对象的value，要求返回一个css属性值。
+
+    // 创建一个vue响应式系统，并挂载到真实DOM节点上
+    var app = new Vue({
+      el: '#app',
+      data: {
+        color: '',
+        font: 1,
+        show: true,
+        aStyle: {
+          color: 'red',
+          ['font-size']: '40px',
+          backgroundColor: '#cccccc'
+        },
+        borderWidth: 1,
+        borderColor: 'red',
+        pt: 30,
+        paddingWho: "top"
+      },
+      methods: {
+        createBgClass() {
+          // do something
+          return 'bg'
+        },
+        createStyle(h) {
+          // do something
+          return h ? {
+            lineHeight: h+'px'
+          }: {}
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

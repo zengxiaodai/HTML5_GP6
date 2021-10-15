@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+<div id='app'>
+  <h1 v-text='msg'></h1>
+  <h1>{{count}}</h1>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script>
+// 渐进式框架：vue可大可小，可以做小项目，也可以做大型企业级项目。
+// vue代码是js代码（背后是有DOM）
+// vue只兼容主流浏览器，尤其是IE只兼容IE9+以上（IE6/7/8不支持）
+// 编程范式：vue代码是基于选项的构造函数（new Vue(options)）
+// 基于DOM的开发思想：如果想改变视图，使用DOM选择器找到DOM节点，再通过复杂的DOM操作来改变界面。
+// 非常非常重要的Vue思想：在vue响应式系统中，如果我想改变视图，我的思路去改变这个视图节点所对应的声明式变量。
+
+// 安装vue：下载vue.min.js、使用cdn加载器安装开发版本。
+// 验证是否安装成功
+// console.log('vue', Vue)
+
+// new Vue()返回的是一个vue实例
+// 在这里，你可以理解成是返回一个vue响应式系统
+var app = new Vue({
+  // 把vue所创建出来的响应式系统挂在一个 #app 的DOM节点。
+  // 作用是把vue的js代码，作用到一个HTML结构。
+  el: '#app',
+  // vue基础学习 = 声明式 + 组件化
+  // 是定义vue声明式变量的地方
+  // 声明式变量的特点：当声明式变量发生变化时，视图页面自动更新。这个特点就是"vue响应式"。
+  // 在data中定义的声明式量，通过get/set操作，在实例对象上可以访问到它们。
+  data: {
+    msg: 'Hello World',
+    foo: 'Hello GP6',
+    count: 1
+  }
+})
+
+// setTimeout(()=>{
+//   app.msg = '你好，世界'
+// }, 3000)
+//
+// setInterval(()=>{
+//   app.count++
+// }, 1000)
+
+</script>
+
+
+</body>
+</html>

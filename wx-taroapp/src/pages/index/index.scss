@@ -1,0 +1,13 @@
+.navs {
+  white-space: nowrap;
+  .item {
+    display:inline-block;
+    padding: 0 15rpx;
+    border-left: 1rpx solid #ccc;
+    font-size: 26rpx;
+    line-height: 50rpx;
+  }
+  .item.on{
+    color: red;
+  }
+}

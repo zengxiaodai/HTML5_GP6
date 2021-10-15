@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .qf-rate span {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      margin: 0 10px;
+    }
+    .qf-rate span.on {
+      background: orange;
+      border-color: orange;
+    }
+  </style>
+</head>
+<body>
+
+  <div id='app'>
+    <!-- <qf-rate :value='score' @input='xyzHandle'></qf-rate> -->
+    <qf-rate v-model='score'></qf-rate>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+
+    // 父子组件通信 [v-model在组件化中的高级用法]
+
+    // 约定：当我们谈及父子组件时，常常指的是自定义组件之间嵌套关系。
+    // 通信：在软件程序中，所谓的“通信”指的就是数据的交换。
+    // 父组件向子组件传递数据，怎么实现？使用“自定义属性”，在子组件中使用props选项来接收。
+    // 子组件向父组件传递数据，怎么实现？使用“自定义事件”，在子组件中使用this.$emit()来触发父组件给的事件。
+
+    // 类表单：那些涉及到父子组件通信的组件，我们通常可以称之为“类表单”。
+    // 那么类表单能不能使用v-model实现双向绑定？
+    // 能。
+    // 知识点：在Vue中，v-model是一种语法糖。本质上：v-model = v-bind:value + v-on:input。
+    // 经验：当我们发现一个自定义组件有这种父子传值的需求时，我们考虑使用v-model将其变成类表单。
+
+    Vue.component('qf-rate', {
+      template: `
+      <div class='qf-rate'>
+        <span
+          v-for='i in 5'
+          :class='{"on": value>= i}'
+          @click='$emit("input", i)'
+        >
+        </span>
+      </div>
+      `,
+      props: {
+        value: { type: Number, required: false, default: 0 }
+      }
+    })
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        score: 0
+      },
+      watch: {
+        score() {
+          console.log('调接口')
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

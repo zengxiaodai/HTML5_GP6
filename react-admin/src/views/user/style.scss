@@ -1,0 +1,9 @@
+.qf-user-manager {
+  .ant-col-2 {
+    &>span {
+      display: block;
+      text-align: right;
+      padding-right: 5px;
+    }
+  }
+}

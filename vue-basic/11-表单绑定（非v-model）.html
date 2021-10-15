@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <span>用户名：</span>
+    <!-- <input type="text" v-model='name' /> -->
+    <input type="text" :value='name' @input='nameChange' />
+    <hr>
+
+    <span>选择性别：</span>
+    <input type="radio" value='1' :checked='gender===1' @change='genderChange' />男
+    <input type="radio" value='2' :checked='gender===2' @change='genderChange' />女
+    <input type="radio" value='3' :checked='gender===3' @change='genderChange' />未知
+    <hr>
+
+    <span>选择学历：</span>
+    <select :value='level' @change='levelChange'>
+      <option value="1">高中</option>
+      <option value="2">大专</option>
+      <option value="3">本科</option>
+      <option value="4">硕士</option>
+    </select>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        name: '',
+        gender: 1,
+        level: 1
+      },
+      methods: {
+        nameChange(e) {
+          this.name = e.target.value
+        },
+        genderChange(e) {
+          this.gender = parseInt(e.target.value)
+        },
+        levelChange(e) {
+          this.level = e.target.value
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

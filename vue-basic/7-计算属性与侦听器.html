@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <h1 v-text='c'></h1>
+    姓：<input type="text" v-model='first' />
+    名：<input type="text" v-model='last' /><br>
+    全名：<input type="text" v-model='full' />
+    <hr>
+
+    搜索：<input type="text" v-model='text' />
+
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 一、计算属性 computed
+
+    // 作用：用于从视图模板（指令表达式中）抽离出复杂的运算，以保证视图模板的整洁、可维护。
+
+    // 注意1：created 这是一个函数，它是生命周期。computed 这是计算属性，它是一个对象。
+    // 注意2：计算属性本质上一个函数（默认是get操作），所以要return一个具体的值。
+
+    // 特点1：计算属性可以当作一个声明式变量来使用（可以用指令来对它进行操作）。通常情况下计算属性用于对那些响应式变量（__ob__）进行计算，当它所关联的响应式变量发生变化时，计算属性所对应的函数将重新计算（执行）。
+    // 特点2：计算属性可以计算一切响应式变量，比如vuex中的数据。
+    // 特点3：计算属性除了可以用于常规的指令(v-text/v-for/v-if..)外，还可以用在v-model上。但计算属性默认只有get操作，要将其改成get/set的对象写法。
+
+
+    // 二、侦听器（监听器） watch
+
+    // 作用：如果你想监听一个响应式变量的变化，当它变化时，可以做一些业务操作。
+
+    // 注意：watch不是一函数，是一个对象。
+
+    // 特点1：监听器函数可以监听三类响应式变量，可以监听data声明式变量，可以监听computed计算属性，还可以监听vue-router的URL变化。
+    // 特点2：理论上监听器函数还可以监听vuex中的响应式变量的变化，但不建议滥用。
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        count: 1,
+        msg: '',
+        first: '',
+        last: '',
+        num: 0,
+        text: ''
+      },
+      computed: {
+        // c 这种写法，默认只支持get操作。
+        c() {
+          // 它与count这个响应式变量有关。
+          // 所以，只有当count变化时，当前这个计算属性的函数才会重新执行。
+          // 进一步理解，如果count没变，其它的非相关的响应式变量发生变化，我不会重新执行。
+          return (Math.random()*this.count).toFixed(3)
+        },
+        // 当计算属性绑定在v-model，我们还要支持set操作，否则报错。
+        full: {
+          get() {
+            var point = (!this.first || !this.last)
+            return `${this.first}${point?'':'·'}${this.last}`
+          },
+          set(newVal) {
+            // console.log('newVal', newVal)
+            var arr = newVal.split('·')
+            this.first = arr[0] || ''
+            this.last = arr[1] || ''
+          }
+        }
+      },
+      watch: {
+        // 监听器函数名，就是你要监听的响应式变量的名字。
+        // 它是一个函数，接收两个参数，分别代表的是被监听的响应式变量的新值、旧值。
+        first(newVal, oldVal) {
+          console.log(newVal, oldVal)
+          this.num++
+        },
+        // 监听full这个计算属性的变化
+        // 这个监听器函数，有且仅有当full变化完成时才执行。
+        full() {
+          console.log('最新的full', this.full)
+          this.num++
+        },
+        // 实现实时输入搜索功能
+        text() {
+          // 根据最新的text来调接口
+          console.log('使用最新的text字段调接口', this.text)
+        }
+      }
+    })
+  </script>
+</body>
+</html>

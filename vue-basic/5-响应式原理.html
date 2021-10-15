@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id='app'>
+    <input id='ipt' type="text" />
+    <h1 id='h1'></h1>
+  </div>
+
+  <script>
+    // 什么是响应式？当vue中的data声明式变量发生变化时，视图自动更新；反过来，对于表单类的元素，它们在视图中被改变时，它们的值会同步更新到data中去。
+
+    // 响应式原理：为什么vue的data数据具有上述描述的响应式特点？
+
+    // 对这种普通的对象，当我们访问或修改它时，你如何判断访问成功、修改成功？
+    // 答案：这种普通对象，我们无法监听变量的变化。
+    // 推导：如果vue.data是普通对象，那么它的变化也无法监听。显然这是不可能的，Vue在背后肯定做了一些什么事儿，这个事儿就是响应式原理。
+    var obj = {
+      a: 1,
+      b: 2
+    }
+
+    // 经验：如果以后在vue开发中，打印的变量如果显示有“__ob__”这样的标记，则说明这个变量不是普通的变量，而是被Vue处理过的响应式原理。
+
+    // Vue响应式是如何实现的呢？vue2.0中，使用的Object.defineProperty()来实现的；在vue3.0中使用了效率更高的Proxy来实现。
+
+    // app可以理解成是"Vue组件实例this"
+    var app = {}
+
+    // 理解成你手动放在data选项上的数据
+    var c = 0
+    var name = '王嵩'
+    // 使用Object.defineProperty()定义对象，好处是可以劫持属性的setter/getter操作。
+    // 这种定义对象的方式，它可以让我们使用getter/setter把属性进行劫持，可以非常方便地知道变量什么时候被访问了、又是什么时候被修改了。
+
+    // Vue是什么做的？我们在data上放置变量时，默认是不具有响应式的。当Vue组件实例化时，Vue会遍历data这个普通对象，使用Object.defineProperty()对所有的data上的变量进行劫持（给这个变量都加上get/set的钩子），并同时这被劫持的变量挂到组件的原型链上，接着根据vue指令进行依赖收集（记录DOM节点与这些声明式变量之间的一一对应关系）。
+    Object.defineProperty(app, 'count', {
+      // 这个get是一个hanlder，当有人访问app.count，会触发这个get函数执行
+      get() {
+        console.log('有人访问count')
+        return c
+      },
+      set(newVal) {
+        c = newVal
+        console.log('有人修改count')
+      }
+    })
+    // 劫持name这个普通变量，将其变成响应式数据
+    Object.defineProperty(app, 'name', {
+      get() {
+        console.log('有人访问name')
+        return name
+      },
+      set(newVal) {
+        name = newVal
+        console.log('有人修改name')
+        // 当有人修改响应式变量时，我们通知Watcher更新视图
+        Watcher('name')
+      }
+    })
+
+    // 依赖收集（用于记录DOM结构和响应式变量之间的一对一的关系）
+    var deepObj = {
+      name: ['h1', 'ipt']
+    }
+
+    // 作用：根据依赖收集的记录，进行视图更新（背后是DOM操作）
+    function Watcher(key) {
+      // 把name这个响应式变量渲染到视图结构中去
+      var idArr = deepObj[key]
+      document.getElementById(idArr[0]).innerText = app[key]
+      document.getElementById(idArr[1]).value = app[key]
+    }
+
+
+    // 页面初始化操作
+    (function init() {
+      Watcher('name')
+      // 初始化的事件绑定
+      // 思考v-model.lazy背后的原理，使用blur表单事件。
+      document.getElementById('ipt').addEventListener('blur', function(e) {
+        // 给input表单绑定input的事件
+        // 当表单视图发生变化（表单的值发生了变化）
+        app.name = e.target.value
+      })
+    })()
+
+
+
+
+
+
+
+  </script>
+
+</body>
+</html>

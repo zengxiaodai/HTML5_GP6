@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id='app'>
+    <h1 id='h1' v-text='count'></h1>
+    <button @click='clickHandle'>自增</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 生命周期
+    // 理解：vue所有的组件都是有生命的，就好比是人的生命一样。vue组件从生到死的这个过程，被划分成了多个阶段，在每个阶段中有一些重要的时刻（钩子函数），它们就是Vue生命周期钩子。
+    // vue生命周期钩子总共有11个函数，常用的有8个，分为四个阶段。
+    // 第一阶段：创建阶段（2） 受精--出生
+    // 第二阶段：挂载阶段（2） 办理出生证明--去派处所上户口
+    // 第三阶段：更新阶段（2） 是一个循环系统，幼儿园、小学、初中、高中……不断循环成长过程
+    // 第四阶段：销毁阶段（2)  拔掉氧气管--灵魂出鞘
+
+    // MVVM
+    // Vue并没有完全遵循MVVM的模范。
+    // 网页的技术本质：html+css+js
+    // 网页的本质：视图View + 数据Model
+    // 思考一个问题：数据Model是如何与视图View组装起来的？
+    // 在jq时代，通过jq的DOM操作把数据添加到视图去的。因为没有标准，所以会出大量的没必要的DOM操作。（乱杀无辜）这种棘手的问题，该如何解决？——Facebook诞生了React——它是一个MVVM库。
+
+    // MVVM = Model + View + VM虚拟DOM
+    // MVVM背后做法：把用户直接的DOM进行隐藏（不推荐用户直接操作DOM），它给你一个虚拟DOM（描述真实DOM的完整结构，并且把真实DOM中那些动态数据进行了标记）。以后如果用户想改变真实DOM，正确的做法先修改得到一份新的虚拟DOM。进一步触发大名鼎鼎的diff运算，对两个虚拟DOM进行遍历，找出其中变化的最小差异（脏节点），通过Wacher来更新视图。当DOM更新完成时，那个旧的虚拟DOM会删除。
+    // MVVM框架，你搞这么麻烦，有何意义？尽可能地降低了DOM操作的粒度，也就是尽可能地减少了没有必要的DOM操作。因为DOM操作是性能损耗性能的头号杀手，所以MVVM本质上优化前端应用的性能。
+    // 总结：虚拟DOM存在的意义，降低用户对DOM的直接操作，减少没有必要DOM操作。
+
+    // 生命周期钩子函数，代表是“时刻”，是一个具体的时间点。
+    var app = new Vue({
+      // 在beforeCreate之前
+      // 1、初始化所有的methods方法
+      // 2、初始化生命周期钩子函数
+      el: '#app',
+      data: {
+        count: 1,
+        list: []
+      },
+      // 第一阶段：创建阶段
+      beforeCreate() {
+        console.log('----beforeCreate')
+        console.log('count', this.count)
+      },
+      // 1、使用Object.defineProperty()对data选项进行劫持
+      // 2、被劫持的数据，被放到原型链上。就可以使用this来访问它们。
+      created() {
+        console.log('-----created')
+        console.log('count', this.count)
+        // 调后端接口
+        // ajax().then(res=>this.list=res.list)
+      },
+
+      // 第二阶段：挂载阶段
+      beforeMount() {
+        console.log('-----beforeMount')
+      },
+      // 1、创建虚拟DOM。虚拟DOM用于描述真实的DOM结构，实际是一个JSON数据，保存电脑的内存中。
+      // 2、根据虚拟DOM，将其中记录的脏节点替换成真实的DOM结构。（把指令对应的声明式变量更新到视图中去）
+      mounted() {
+        console.log('-----mounted')
+        // 调接口后端接口
+        // 开启定时器
+        this.timer = setInterval(()=>{
+          this.count++
+          console.log('timer-----', this.count)
+        }, 1000)
+        // 在这里还可以做真实的DOM操作（不推荐）
+        // 为什么在这里可以进行DOM操作？原因是视图初始化已完成。
+        document.getElementById('h1').style.color = 'red'
+        // 开启websocket长连接
+        // 在这里可以初始一些DOM的UI插件（比如jq轮播图）
+      },
+
+      // 第三阶段：更新阶段
+      beforeUpdate() {
+        console.log('-----beforeUpdate')
+      },
+      // 1、当data中数据发生变化时，基于旧虚拟DOM，生成一个全新的虚拟DOM
+      // 2、触发diff运算，对两个虚拟DOM进行遍历、找出最小化的脏节点，通知Watcher更新视图
+      updated() {
+        console.log('-----updated')
+        // 特殊场景：希望监听视图更新完成时做某件事儿？你可以这里干。
+      },
+
+      // 第四阶段：销毁阶段
+      // 在vue中有哪些方式可以触发组件的销毁呢？
+      // 使用this.$destroy()这个内置api进行销毁。
+      // 使用vue-router路由切换进行销毁。
+      beforeDestroy() {
+        console.log('----beforeDestroy')
+        // 清除定时器
+        clearInterval(this.timer)
+        // 清除websocket长连接
+        // 清除一些缓存的数据
+        // 清除一些占用内存的变量
+      },
+      // 1、移除掉Watcher（对应的结果，劳模死了，DOM将不会再更新了）
+      // 2、移除子组件、并且对v-on所绑定的事件处理器进行解绑（removeEventListener）
+      destroyed() {
+        console.log('-----destroyed')
+        console.log('this', this)
+      },
+
+      // methods方法，是beforeCreate()之前被声明的
+      methods: {
+        clickHandle() {
+          this.count++
+        }
+      }
+    })
+  </script>
+</body>
+</html>

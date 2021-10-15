@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .qf-filter span {
+      padding: 0 10px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .qf-filter span.on {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <div id='app'>
+    <qf-filter v-model='tab'></qf-filter>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    Vue.component('qf-filter', {
+      template: `
+      <div class='qf-filter'>
+        <span
+          v-for='item in list'
+          v-text='item.name'
+          :class='{"on": value===item.value}'
+          @click='$emit("input", item.value)'
+        >
+        </span>
+      </div>
+      `,
+      data() {
+        return {
+          list: [
+            { id: 1, name: '全部', value: '' },
+            { id: 2, name: '精华', value: 'good' },
+            { id: 3, name: '招聘', value: 'job' },
+            { id: 4, name: '问答', value: 'ask' },
+            { id: 5, name: '分享', value: 'share' }
+          ]
+        }
+      },
+      props: {
+        value: { type: String, required: false, default: '' }
+      }
+    })
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        tab: ''
+      },
+      watch: {
+        tab() {
+          console.log(`用最新的 tab = ${this.tab} 来调接口`)
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

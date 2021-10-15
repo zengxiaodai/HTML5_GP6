@@ -1,0 +1,43 @@
+<view class="index">
+
+  <view class='container'></view>
+
+  <button bindtap="start1">开始动画1</button>
+
+  <view class="door"></view>
+  <button bindtap="start2">关门</button>
+
+  <canvas class='can' type="2d" id='can'></canvas>
+  <button bindtap='save'>保存到相册</button>
+
+  <match-media min-width="500" max-width="600">
+    <view>当页面宽度在 300 ~ 500 px 之间时展示这里</view>
+  </match-media>
+
+  <movable-area class="screen">
+    <movable-view class="text" direction="all">text</movable-view>
+  </movable-area>
+
+  <audio    
+    poster="http://y.592000.png"
+    name="此时此刻"
+    author="许巍"
+    src="http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E06DCBDC9AB7C49FD713D632D313AC4858BACB8DDD29067D3C601481D36E62053BF8DFEAF74C0A5CCFADD6471160CAF3E6A&fromtag=46"
+    id="myAudio"
+    controls
+    loop>
+  </audio>
+  <button bindtap='startPlay'>播放</button>
+
+  <!-- <camera device-position="back" flash="off" binderror="error" style="width: 100%; height: 300px;"></camera> -->
+  <button bindtap='takeCamera'>拍照</button>
+  <image src='{{avatar}}'></image>
+
+  <button bindtap="selectPay">选择支付方式</button>
+
+  <button bindtap="chooseImg">选择照片</button>
+
+  <view bindlongtap='copy'>OrderNo: {{order_no}}</view>
+
+  <button bindtap="scan">扫码</button>
+</view>

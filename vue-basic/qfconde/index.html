@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>QfCnode</title>
+  <link rel="stylesheet" href="./assets/style.css">
+</head>
+<body>
+
+  <div id='app' class="app">
+    <qf-cnode-filter v-model='tab' :data='cates'></qf-cnode-filter>
+    <qf-cnode-list :data='newList'></qf-cnode-list>
+    <qf-cnode-page v-model='page'></qf-cnode-page>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src='./utils/fetch.js'></script>
+  <script src='./components/qf-cnode-filter.js'></script>
+  <script src='./components/qf-cnode-list.js'></script>
+  <script src='./components/qf-cnode-page.js'></script>
+  <script src='app.js'></script>
+
+</body>
+</html>

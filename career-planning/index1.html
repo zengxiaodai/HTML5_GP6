@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id='app'>
+    <span>请输入：</span>
+    <input type="text" v-model='name'>
+    <br>
+    <span>显示：</span>
+    <span>{{name}}</span>
+    <hr>
+
+    <h1 v-bind:title='title'>一行文字</h1>
+  </div>
+
+
+  <script src='./vue.js'></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        name: 'lisi',
+        title: 'qf'
+      }
+    })
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+export const TEST_MSG_UPDATE = 'TEST_MSG_UPDATE'
+
+export const COUNTER_NUM_SUB = 'COUNTER_NUM_SUB'
+export const COUNTER_NUM_ADD = 'COUNTER_NUM_ADD'
+
+export const GET_CNODE_LIST = 'GET_CNODE_LIST'

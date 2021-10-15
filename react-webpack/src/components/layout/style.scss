@@ -1,0 +1,76 @@
+.qf-layout {
+  height: 100%;
+  width: 100%;
+  .ant-layout {
+    height: 100%;
+  }
+  .ant-header {
+    color: black;
+  }
+  .qf-sider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow-y: scroll;
+    .toggle {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding-left: 22px;
+    }
+    .logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 20px auto;
+      overflow: hidden;
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
+      img:hover {
+        opacity: 0.5;
+      }
+    }
+    .logo.off {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  .qf-sider::-webkit-scrollbar {
+    display: none;
+  }
+  .qf-content {
+    position: absolute;
+    top: 15px;
+    bottom: 15px;
+    right: 0;
+    left: 15px;
+    overflow: auto;
+    background: white;
+    border-radius: 3px;
+    padding: 15px;
+    min-width: 800px;
+  }
+}
+
+// 修改antd样式
+.anticon {
+  color: white;
+  font-size: 18px;
+}
+.ant-layout-sider-children {
+  position: relative;
+}
+.ant-layout-content {
+  position: relative;
+}
+.ant-layout-header {
+  background: white;
+  padding: 0 15px;
+}

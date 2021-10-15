@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app1">
+    <qf-button></qf-button>
+    <qf-home></qf-home>
+    <qf-panel></qf-panel>
+    <qf-star></qf-star>
+  </div>
+  <hr>
+
+  <div id='app2'>
+    <qf-button></qf-button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 全局组件（一次定义，在任何组件中都访问）
+    // 全局组件必须在new Vue()之前进行加载和编译
+    Vue.component('qf-button', {
+      template: `
+      <div>
+        <button>qf-button</button>
+      </div>
+      `
+    })
+
+    Vue.component('qf-home', {
+      template: `
+      <div>
+        <qf-button></qf-button>
+        <qf-select></qf-select>
+      </div>
+      `,
+      components: {
+        'qf-select': { template: '<div>qf-select</div>' }
+      }
+    })
+
+    var starOpt = {
+      template: `<div>qf-star</div>`,
+      created() { console.log('qf-star') }
+    }
+
+    var app1 = new Vue({
+      el: '#app1',
+      data: {
+        msg: 1
+      },
+      // 这个选项用于定义局部组件
+      // 局部组件也必须是两个以上的单词
+      // 局部只能在当前所在组件的视图模板进行使用
+      // 局部组件：如果当前组件销毁，局部组件会一起都销毁。
+      components: {
+        'qf-panel': {
+          template: `
+          <div>
+            <h4>qf-panel</h4>
+            <h4 v-text='msg'></h4>
+          </div>
+          `,
+          data() {
+            return { msg: 1 }
+          }
+        },
+        'qf-star': starOpt
+      }
+    })
+
+    var app2 = new Vue({
+      el: '#app2'
+    })
+
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+<view class="music">
+    <view class="left">
+        <text
+            class="label"
+            style="background:{{label[music.label].color}}"
+        >{{label[music.label].label}}</text>
+        <text>{{music.name}}</text>
+    </view>
+    <view class="right">
+        <image 
+            src='/assets/a.png'
+            data-abc='1'
+            data-random="{{music.id}}"
+            catchtap='skip' 
+        />
+    </view>
+</view>

@@ -1,0 +1,48 @@
+<view class="user">
+
+<!-- 用户信息 -->
+<view class="info">
+    <!-- 在 2.10+以后的获取用户信息的写法 -->
+    <button 
+        class="avatar" 
+        bindtap='getInfo' 
+        wx:if='{{canUseProfile}}'
+    >
+        <image src='{{info.avatarUrl || "/assets/avatar.png"}}' />
+    </button>
+    <!-- 在 2.10+以前的获取用户信息的写法 -->
+    <button 
+        class="avatar" 
+        open-type="getUserInfo"
+        bindgetuserinfo="getInfo"
+        wx:else
+    >
+        <image src='{{info.avatarUrl || "/assets/avatar.png"}}' />
+    </button>
+    
+    <view class="middle">        
+        <view wx:if="{{info.nickName}}">
+            <view>{{info.nickName}}</view>
+            <view>当前积分800分</view>
+        </view>
+        <view wx:else class='not-login'>点击头像登录</view>
+    </view>
+
+    <view class="next">
+        <image src='/assets/icon/next.png' />
+    </view>
+</view>
+
+<!-- 功能列表 -->
+<view class="abbi-list">
+    <view class="row">
+        <text>官方客服</text>
+        <button open-type="contact">></button>
+    </view>    
+    <view class="row">
+        <text>投拆建议</text>
+        <button open-type="feedback">></button>
+    </view>
+</view>
+
+</view>

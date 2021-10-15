@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .confirm { background: blue; color: white; }
+    .delete { background: red; color: white; }
+    .qf-btn {
+      font-size: 12px;
+      padding: 0 10px;
+      line-height: 32px;
+      cursor: pointer;
+      display: inline-block;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 这是一个vue根容器 -->
+  <div id="app">
+    <!-- type、text都叫做自定义属性 -->
+    <!-- 带有 : 是v-bind的简写，都叫做“动态属性” -->
+    <!-- 没有 : 的属性，都叫做“静态属性” -->
+
+    <qf-button type='confirm' :text='("确定")' plain></qf-button>
+    <qf-button type='cancel' :icon='1' round></qf-button>
+
+    <!-- 在自定义组件上，使用v-on可以绑定“自定义事件” -->
+    <!-- 绑定“自定义事件”时，事件处理器要定义在当前组件的methods中 -->
+    <!-- 自定义事件给到子组件后，子不用接收，可以直接使用，怎么使用？使用this.$emit('') -->
+    <qf-button type='delete' text='删除' @abc='deleteUser'></qf-button>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 组件化（是区分初级开发者和中高级开发者的水平线）
+    // 意义：封装复用（低耦合、业务逻辑的隐藏、便于维护）、快速开发（组合、搭积木，使用预制好的组件进行堆砌）。
+
+    // 自定义组件
+    // 使用Vue.component()自定义组件
+    // 第一个参数是组件的名字，名字要求必须是两个以上的单词，并且中划线连接。目的是为了和HTML原生标签不冲突。
+    // 第二个参数是一个选项（options）, 在选项中有一个必填的选项template（用于指定组件的视图结构），在template中可以使用所有我们学过的指令。
+    // 在第二个参数中可以使用除了el以外其它所有vue选项。
+    // 如何理解自定义组件？你可以理解是HTML的扩展，相当于是你自己定义的THML新元素。
+    // 自定义组件可以无限复用。
+    // 在自定义组件时，使用data必须是一个工厂方法（函数），实现对data的深拷贝。
+    // 在自定义组件时，可以使用props这个选项来接收父组件传递过来的自定义属性。
+    // 注意：组件的template视图结构只能是单一根节点。
+
+    Vue.component('qf-button', {
+      template: `
+      <span
+        :class='[c, "qf-btn"]'
+        v-text='inner'
+        :style='{
+          opacity: plain ? 0.4 : 1,
+          borderRadius: circle ? "50%" : "16px"
+        }'
+        @click='clickHandle'
+      >
+      </span>
+      `,
+      created() { console.log('qf-button created') },
+      // 使用工厂方法实现对data的深复制
+      data() {
+        return {
+          name: 'QfButton'
+        }
+      },
+      // 用于父组件传递过来的自定义属性，可以使用this来访问。
+      props: {
+        text: { type: String, required: false, default: '确定' },
+        type: { type: String, required: false, default: 'confirm' },
+        plain: { type: Boolean, required: false, default: false },
+        round: { type: Boolean, required: false, default: false },
+        icon: { type: Number, required: false, default: -1 }, // 1  2  3
+        circle: { type: Boolean, required: false, default: false }
+      },
+      mounted() {
+        console.log('来自父组件的数据', this.text)
+      },
+      computed: {
+        c() {
+          return this.type
+        },
+        inner() {
+          // 判断this.icon === -1
+          var res = ''
+          switch (this.icon) {
+            case 1:
+              res = '@'
+              break
+            case 2:
+              res = '#'
+              break
+            case 3:
+              res = '$'
+              break
+            default:
+              res = this.text
+          }
+          return res
+        }
+      },
+      methods: {
+        clickHandle(e) {
+          // 触发、发射
+          // e.target.detail = 'clicked'
+          // 父子组件之间的事件通信
+          this.$emit('abc', [1,2,3,4])
+        }
+      }
+    })
+
+    // Vue根组件（不会被复用，因此data可以不是工厂方法）
+    var app = new Vue({
+      el: '#app',
+      methods: {
+        deleteUser(e) {
+          console.log('准备删除用户', e)
+        }
+      }
+    })
+  </script>
+
+  <script>
+  function factory() {
+    // 初始值
+    var o = { a: 1, b: 2 }
+    return o
+  }
+  </script>
+
+</body>
+</html>

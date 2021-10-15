@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  .qf-dialog-layer {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.2);
+  }
+
+  .qf-dialog {
+    position: absolute;
+    top: 90px;
+    left: 50%;
+    width: 680px;
+    background: white;
+    border-radius: 3px;
+    margin-left: -340px;
+  }
+  .header {
+    height: 40px;
+    line-height: 40px;
+    overflow: hidden;
+    padding: 0 20px;
+  }
+  .header>span.close {
+    float: right;
+    cursor: pointer;
+  }
+  .footer {
+    line-height: 50px;
+    height: 50px;
+    overflow: hidden;
+    padding: 0 20px;
+  }
+  .footer span {
+    float: right;
+    margin-left: 20px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    line-height: 30px;
+    margin-top: 10px;
+    padding: 0 15px;
+    font-size: 12px;
+    border-radius: 3px;
+  }
+  .body {
+    padding: 20px;
+  }
+  </style>
+</head>
+<body>
+
+  <div id='app'>
+    <button @click='editUser'>修改用户名</button>
+    <qf-dialog
+      title="修改用户名"
+      :show-close='false'
+      :visible='show'
+      @close='closeHandle'
+      size='small'
+      @confirm='submit'
+    >
+      <template #body>
+        <div>
+          <span>用户名：</span>
+          <input v-model.trim='name' type="text" />
+        </div>
+      </template>
+      <template #default>
+      </template>
+      <template v-slot:footer>
+      </template>
+    </qf-dialog>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 插槽
+    // 作用：是实现vue组件化（v-bind / v-on / v-slot）的技术之一。
+    // v-bind 自定义属性
+    // v-on   自定义事件
+    // v-slot 插槽
+    // 理解：像书包中的格子。
+    // <slot>是Vue内置组件，在封装组件时，把那些不确定视图结构，用slot占一个位置，留给用户进行自定义。
+    // 在使用自定义组件时，被嵌套在其中的元素，会默认去自定义组件中找到一个名字叫default的slot进行填充。
+    // 用于填充插槽的视图结构都属性父组件，所以填充插槽的业务都写在父组件中。
+    // 具名插槽：<slot>默认叫“default”，可以给插槽取名 <slot name='body'></slot>
+    // 在自定义组件时，如果用到了具名插槽，那么在使用自定义组件时，要使用<template #body>来指定找到名字叫body的slot来填充视图。
+    // v-slot在组件化中用得非常多，也有简写 #
+
+    Vue.component('qf-dialog', {
+      template: `
+      <div class='qf-dialog-layer' v-if='visible'>
+        <div
+          class='qf-dialog'
+          :style='aSytle'
+        >
+          <div class='header'>
+            <span v-text='title'></span>
+            <span
+              class='close'
+              @click='$emit("close")'
+              v-if='showClose'>X</span>
+          </div>
+          <div class='body'>
+            <slot name='body'></slot>
+          </div>
+          <div class='footer'>
+            <span @click='$emit("confirm")'>确定</span>
+            <span @click='$emit("close")'>取消</span>
+          </div>
+        </div>
+
+      </div>
+      `,
+      props: {
+        title: { type: String, required: false, default: '提示' },
+        showClose: { type: Boolean, required: false, default: true },
+        visible: { type: Boolean, required: false, default: false },
+        size: { type: String, required: false, default: '' }  // small
+      },
+      computed: {
+        aSytle() {
+          var flag = (this.size==="small")
+          return {
+            width: flag ? "410px" : "680px",
+            marginLeft: flag ? "-205px" : "-340px"
+          }
+        }
+      }
+    })
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        show: false,
+        name: ''
+      },
+      methods: {
+        editUser() {
+          this.show = true
+        },
+        closeHandle() {
+          this.show = false
+        },
+        submit() {
+          const data = {
+            name: this.name
+          }
+          setTimeout(()=>{
+            console.log('data', data)
+            this.name = ''
+            this.show = false
+          }, 1000)
+        }
+      }
+    })
+  </script>
+
+
+</body>
+</html>

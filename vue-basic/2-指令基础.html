@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    /* 解决 {{}} 一闪而过的样式问题 */
+    [v-cloak] {
+      display: none;
+    }
+    .red { color: red; }
+    .blue { color: blue; }
+    .green { color: green; }
+    .inner {
+      width: 50px;
+      height: 50px;
+      background: red;
+    }
+    .outer {
+      width: 80px;
+      height: 80px;
+      background: blue;
+    }
+  </style>
+</head>
+<body>
+
+  <div id='app'>
+    <!-- <h1>{{msg}}</h1> -->
+    <h1 v-text='msg'></h1>
+    <h1 v-cloak>{{msg}}</h1>
+    <h1 v-text='foo+"千锋"'></h1>
+    <h1 v-text='Math.random()'></h1>
+    <hr>
+
+    <h1 v-text='price'></h1>
+    <h1 v-once>{{price}}</h1>
+    <hr>
+
+    <h1 v-text='content'></h1>
+    <h1 v-html='content'></h1>
+    <hr>
+
+    <!-- 单一节点的显示与隐藏 -->
+    <h1 v-show='bol'>我是一行可有可无的文字(show)</h1>
+    <h1 v-if='bol'>我是一行可有可无的文字(if)</h1>
+    <hr>
+
+    <!-- 两个节点的显示与隐藏 -->
+    <h1 v-show='bol1'>我是白天</h1>
+    <h1 v-show='!bol1'>我是黑夜</h1>
+    <hr>
+    <h1 v-if='bol1'>我是白天</h1>
+    <h1 v-else>我是黑夜</h1>
+
+    <!-- 多个节点的显示与隐藏 -->
+    <h1 v-show='idx===1'>11111111111111111</h1>
+    <h1 v-show='idx===2'>22222222222222222</h1>
+    <h1 v-show='idx===3'>33333333333333333</h1>
+    <h1 v-show='idx===4'>44444444444444444</h1>
+    <hr>
+    <h1 v-if='idx===1'>11111111111111111</h1>
+    <h1 v-else-if='idx===2'>22222222222222222</h1>
+    <h1 v-else-if='idx===3'>33333333333333333</h1>
+    <h1 v-else>44444444444444444</h1>
+    <hr>
+
+    <!-- 静态属性：它的值是死的，它的值与声明式变量无关 -->
+    <h1 title='我的价格是999元'>电脑</h1>
+    <!-- 动态属性：它的值是活的，与声明式变量有关 -->
+    <!-- <h1 v-bind:title='(`我的价格是${money}元`)'>电脑</h1> -->
+    <h1 :title='(`我的价格是${money}元`)'>电脑</h1>
+    <hr>
+
+    <h1 :class='color'>我是一行有颜色的文字</h1>
+    <hr>
+
+    <div v-pre>
+      <h1>{{text}}</h1>
+    </div>
+    <hr>
+
+    <!-- <h1 v-on:click='clickHandle'>点击</h1> -->
+    <h1 @click='clickHandle'>点击</h1>
+    <hr>
+
+    <!-- 事件名都要小写， @后面跟的就是事件名称  -->
+    <!-- <div class='inner' @mouseenter='innerHandle'></div> -->
+    <div class='outer' @click='outerHandle'>
+      <div class='inner' @click.stop='innerHandle'></div>
+      <a
+        style='color:white;'
+        @click.prevent.stop='editHandle'
+        href="https://baidu.com">
+        编辑
+      </a>
+    </div>
+    <hr>
+
+    <div>
+      <input type="checkbox" @click.prevent='doneHandle' />
+    </div>
+    <hr>
+
+    <div>
+      <input
+        type="text"
+        @keyup.enter='confirm'
+        @keyup.ctrl.65='select'
+      />
+    </div>
+    <hr>
+    <div @click.right='rightHandle'>测试鼠标事件</div>
+    <hr>
+
+    <!-- 在vue中进行事件绑定时，可以传递自定义参数 -->
+    <!-- 这种带有$开头的变量，是vue系统中定义的内置变量 -->
+    <!-- $event代表是事件对象 -->
+    <h1 @click='rowClick(1, $event, 11)'>我是11111</h1>
+    <h1 @click='rowClick(2, $event, 22)'>我是22222</h1>
+    <h1 @click='rowClick(3, $event, 33)'>我是33333</h1>
+    <hr>
+
+    <!-- list就是一个数组，item是每次循环时的临时变量，代表是当前循环的数组元素 -->
+    <!-- index 它是v-for的索引号 -->
+    <div v-for='(item,index) in list'>
+      <span v-text='index'></span>
+      --
+      <span v-text='item.id'></span>
+      --
+      <span v-text='item.user'></span>
+      --
+      <span v-text='item.age'></span>
+    </div>
+    <hr>
+
+    <!-- 渲染一个json对象 -->
+    <!-- user是一个声明式的json对象，v 是遍历对象时的“值” -->
+    <!-- k 是遍历对象时的“键”(通常是字符串) -->
+    <!-- index是遍历对象时的索引号 -->
+    <div v-for='(v, k, index) in user'>
+      <span v-text='index'></span>
+      --
+      <span v-text='k'></span>
+      ：
+      <span v-text='v'></span>
+    </div>
+    <hr>
+
+    <!-- v-for遍历一个 Number 值 -->
+    <!-- num是一个声明式变量，item是从1开始的临时变量 -->
+    <!-- index是遍历对象时的索引号，从0开始 -->
+    <div v-for='(item,index) in num'>
+      <span v-text='index'></span>
+      --
+      <span v-text='item'></span>
+    </div>
+    <hr>
+
+    <div>
+      <input
+        type="text"
+        v-model.trim='todo'
+        @keyup.enter='addTodo'
+      />
+    </div>
+    <hr>
+
+    <div>
+      <input
+        type="text"
+        v-model.number='age'
+       />
+    </div>
+    <hr>
+
+    <div>
+      <textarea v-model.lazy='article'></textarea>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // Vue指令：不仅要熟练地使用，还要示大家会自已封装这些指令。
+    // vue指令的值，实际上是js表达式（不能是js语句），所以大多数的vue指令的值都可使用表达式的运算。
+
+    console.log('vue', Vue)
+
+    // 浏览器默认是无法读懂指令的，它要通过vue编译器（vue compiler）来解释这些指令。
+
+    // 文本类指令
+    // {{}} 文本插值，它的缺点是渲染文本时会出现“花括号一闪而过”问题。解决办法有两个办法，其一使用 v-text 来代替 {{}} 语法，其二使用 v-cloak 来解决。
+    // v-text 用于渲染文本：字符串、数值
+    // v-once 用于渲染文本，和v-text的功能差不多，但是v-once只渲染一次，它所绑定的声明式变量如果再次发生变化，视图不更新。v-once必须配合 {{}} 一起使用。
+    // v-html 用于渲染HTML字符串，把它所绑定的值当作HTML字符串进行处理。v-html它的背后已经帮助我们实现了防注入攻击XSS。
+
+    // 条件渲染类的指令
+    // v-show  它的值最好给一个布尔值，它是通过display:none/block来实现显示与隐藏。
+    // v-if / v-else-if / v-else 它们绑定的值也是布尔值，它们是通过DOM节点的移除与插入的方式来实现显示与隐藏。
+    // v-if在实现显示与隐藏时，性能损耗更大；v-show的性能损耗更小。当一个元素需要频繁执行显示与隐藏时，建议使用v-show。
+    // 当我们使用v-if / v-else-if / v-else这一组指令时，只能作用于兄弟节点上，中间不能插入其它无关的兄弟节点。
+
+    // 动态属性指令
+    // v-bind，用于动态绑定HTML的属性值（id、class、style、src...）
+    // v-bind，用得非常多，所以可以简写成 :
+    // v-bind，是实现动态样式的重要基础：v-bind:class  v-bind:style
+
+    // 忽略Vue编译
+    // v-pre  被v-pre包裹的DOM节点，不会被vue compiler编译。
+    // 特点：被v-pre包裹的DOM节点中的指令不起作用，并且也不报错了。
+    // 通常，我们使用v-pre做一个调试工作。在实际需求开发过程中，它很少真正地被用到。
+
+    // 事件绑定指令
+    // v-on  用于绑定事件，比如click事件、键盘事件、鼠标事件、表单事件等.
+    // v-on 经常用到，所以也可以简写成 @
+    // 事件修饰符：
+      // .stop用于阻止冒泡；
+      // .prevent用于阻止默认事件
+      // .enter监听键盘上Enter事件
+    // 事件修饰符可以链式调用 @click.stop.prevent
+    // 使用事件对象：
+      // 当事件处理器不需要进行自定义传参时，事件处理器函数的默认参数就是事件对象。
+      // 当事件处理器需要接受自定义传参时，事件对象已不再是事件处理器函数的最后一个参数了，我们应该使用 $event 手动传递事件对象。
+
+    // 列表渲染指令
+    // v-for 用于渲染一切被ES6迭代器修饰过的声明式变量，也就是说"如果一变量可以使用for...of进行遍历，那么这个声明式变量就可以使用v-for进行渲染"。
+    // 实战工作：通常使用v-for渲染数组、对象、数字。
+
+    // 表单双向绑定的指令
+    // v-model 作用是用于表单的双向绑定，使用这个指令可以非常方便地帮助取表单的值。
+    // 特点：v-model所绑定的声明式变量和视图中的表单，默认是同步发生更新。当视图中表单发生变化时，v-model所对应的那个变量变成最新值；如果声明式变量发生变化，表单视图也同步发生更新。这就是传说中“表单双向绑定”。
+    // 表单有三个重要修饰符：
+      // .trim 用于去除文本类表单的首尾字符串
+      // .number 用于把表单的值变成Number类型
+      // .lazy 用于性能优化，尤其多行文本框时需要用到。在不使用.lazy的情况下，vue会在背后默默无闻地实现DOM视图和声明式变量的同步更新。所以使用.lazy以后，只有当表单失焦时，都会做一次同步更新。
+
+    // 插槽 v-slot ，组件化时再讲。
+
+
+    // 创建一个vue响应式系统
+    var app = new Vue({
+      data: {
+        msg: 'Hello GP6',
+        foo: 'Hello',
+        price: 800,
+        content: '<div><a href="https://baidu.com">百度</a></div>',
+        bol: true,
+        bol1: true,
+        idx: 1,  // 1 2 3 4
+        money: Math.ceil(Math.random()*1000),
+        color: '',
+        text: '我不会被vue编译',
+        list: [
+          { id: 1, user: '温芳鹏', age: 30 },
+          { id: 2, user: '蔡杰', age: 18 },
+          { id: 3, user: '徐嘉欣', age: 16 }
+        ],
+        user: {
+          name: '刘永琪',
+          age: 25,
+          mobile: '19089890909'
+        },
+        num: 5,
+        todo: '',
+        age: 0,
+        article: ''
+      },
+      // 这个methods选项，用于定义事件处理器，还可以用于封装方法
+      methods: {
+        clickHandle() {
+          console.log('clicked', this)
+        },
+        innerHandle() {
+          console.log('inner handle')
+        },
+        outerHandle() {
+          console.log('outer handle')
+        },
+        doneHandle() {
+          console.log('checkbox clicked')
+        },
+        editHandle() {
+          console.log('编辑')
+        },
+        confirm() {
+          console.log('confirm')
+        },
+        select() {
+          console.log('ctrl+a 事件')
+        },
+        rightHandle(e) {
+          console.log('right clicked')
+          // 我想在这使用事件对象
+          console.log('事件对象', e)
+        },
+        rowClick(idx, e, arg) {
+          console.log('row clicked', idx, e, arg)
+        },
+        addTodo() {
+          console.log('表单中最新值', this.todo.length, this.todo)
+        }
+      }
+    }).$mount('#app')
+
+    // 测试表单v-model的.lazy的效果
+    setInterval(()=>{
+      console.log('article', app.article)
+    }, 300)
+  </script>
+
+</body>
+</html>

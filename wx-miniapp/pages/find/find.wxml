@@ -1,0 +1,112 @@
+<view class="find">
+
+<!-- 轮播图 -->
+<view class="swiper-wrap">
+    <swiper 
+        indicator-dots="{{false}}"
+        autoplay="{{true}}" 
+        interval="{{5000}}" 
+        duration="{{500}}"
+        class="swiper"
+        bindchange="swiperChange"
+    >
+        <block wx:for="{{imgs}}" wx:for-item="abc" wx:key="*this">
+            <swiper-item>
+                <image src="{{abc.src}}" />
+            </swiper-item>
+        </block>
+        
+    </swiper>
+    <view class="dots">
+        <text             
+            wx:for="{{imgs}}"
+            wx:for-index="idx"
+            class="{{curIdx==idx ? 'on' : ''}}"
+            style="background:{{curIdx===idx ? item.color : 'white'}}"
+            wx:key="*this">
+        </text>
+    </view>
+</view>
+
+
+<!-- 搜索框 -->
+<view class="search">
+    <!-- <input type="text" model:value="{{name}}" bindinput="nameChange" /> -->
+    <input 
+        type="text" 
+        value="{{name}}" 
+        bindinput="nameChange" 
+        bindconfirm="confirmSearch"
+        confirm-type="search"
+        placeholder="搜索"
+        bindfocus='scroll'
+    />
+    <text bindtap="cancelSearch">取消</text>
+    <image src="/assets/icon/search.png" />
+</view>
+
+<!-- Picker -->
+
+<view class="filter">
+    <view>
+        <picker 
+            bindchange="catePickerChange" 
+            value="{{curCateIdx}}" 
+            range="{{cateArr}}"
+            range-key="label"
+        >
+            <view class="col">
+                <text>{{cateArr[curCateIdx].label}}</text>
+                <image src='/assets/icon/arrow-down.png' />
+            </view>
+        </picker>
+    </view>
+
+    <view>
+        <picker mode="date" bindchange="datePickerChange">
+            <view class="col">
+                <text>{{curDate}}</text>
+            </view>
+        </picker>
+        <picker mode="time" bindchange="timePickerChange">
+            <view class="col">
+                <text>{{curTime}}</text>
+                <image src='/assets/icon/arrow-down.png' />
+            </view>
+        </picker>
+    </view>
+
+    <!-- 思考：自定义“多列picker”，比如“学科-班级-学员”的选择 -->
+    <!-- const tree = [
+        { id: 1, pid: 0, label: 'HTML5', value: 'hmtl5' },
+        { id: 2, pid: 1, label: '2101班', value: '2101' },
+        { id: 3, pid: 1, label: '2102班', value: '2102' },
+        { id: 4, pid: 1, label: '2103班', value: '2103' },
+        { id: 5, pid: 2, label: '张三', value: 'sz0001' },
+        { id: 6, pid: 2, label: '李四', value: 'sz0002' },
+        { id: 7, pid: 3, label: '王五', value: 'sz0003' },
+
+        { id: 8, pid: 0, label: 'JAVA', value: 'java' },
+        { id: 9, pid: 8, label: '2101班', value: '2101' },
+        { id: 10, pid: 8, label: '2102班', value: '2102' },
+        { id: 11, pid: 9, label: '张三', value: 'sz0008' },
+        { id: 12, pid: 9, label: '李四', value: 'sz0009' },
+        { id: 13, pid: 10, label: '王五', value: 'sz0010' }
+    ] -->
+</view>
+
+
+<!-- 音乐列表 -->
+<view class="music-list">
+    <music_item 
+        wx:for="{{musicArr}}"
+        wx:key="*this"
+        music="{{item}}">
+    </music_item>
+</view>
+
+    
+
+    
+
+</view>

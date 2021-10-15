@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .a { padding: 20px; border: 1px solid #faa50a; }
+    .b { padding: 20px; border: 1px solid #9bbb0b; }
+    .c { padding: 20px; border: 1px solid #fc1c0c; }
+    .d { padding: 20px; border: 1px solid #2ddd0d; }
+    .e { padding: 20px; border: 1px solid #feee0e; }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+
+    <qf-child-a
+      v-model='user'
+      title='hello a'
+      class='on'
+      style='color: red;'
+      abc='00'
+      @click='handle'
+      @xyz='handle'
+    >
+    </qf-child-a>
+    <hr>
+    <qf-child-b :user='user'></qf-child-b>
+    <hr>
+    <hr>
+    <hr>
+
+    <input id='ipt' ref='in' type="text" /><br>
+    <qf-child-c ref='c'></qf-child-c>
+    <button @click='submit'>测试ref操作</button>
+    <hr>
+    <hr>
+    <hr>
+
+    <qf-child-d></qf-child-d>
+    <qf-child-e></qf-child-e>
+    <br>
+    <br>
+    <br>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+
+    // 所谓通信，就是组件之间的数据交流。
+    // 组件之间的关系：父子组件、兄弟组件、未知关系的两个组件。
+
+    // 面试题：Vue中提供了哪些组件通信方案？
+
+    // 1、如果是父子组件，使用自定义属性和自定义事件进行通信。
+    // 2、使用 $parent/$children 在组件树中任意穿梭，找到你想要找到的那个组件实例，并访问它的属性和方法。
+    // 3、如果是兄弟组件，还可以使用状态提升来实现通信（来自于React中的一种通信思想）。
+    // 4、使用 $attrs/$listeners 直接访问父组件给我的所有属性（除class和style以外）和事件。
+    // 5、使用 ref / $refs 实现对HTLM元素、自定义子组件（自定义的后代组件）进行操作（访问数据、调用方法）。
+      // ref 是vue的一个内置标签的属性。如果ref绑定在HTML元素上，那么ref访问就是DOM对象，可以实现DOM操作。在这种情况下，你可以把ref理解成一种快捷的DOM访问方式。原则：不建议过渡使用ref。
+      // ref 还可以用在自定义组件上，那么ref访问的是组件实例，所以这种方式可以访问组件实例的属性和方法。你可以把这种ref理解成一种父子组件的通信方案。
+    // 6、使用 provide/inject 这两个选项，实现向后代组件注入数据。provide用于向后代组件提供任意类型的数据，inject接收父级组件提供的数据。
+    // 7、事件总线，可以在任意两个组件之间实现直接通信。这是一种基于“订阅-发布”模式的通信方式。
+    // 8、状态管理Vuex：是基于Flux的一种终极通信方案。因为太牛，所以后面再讲。
+
+    // 警告：虽然Vue通信方案很多，但不要滥用。
+
+    Vue.component('qf-child-a', {
+      template: `
+      <div class='a' v-bind='$attrs' v-on='$listeners'>
+        <h4>qf-child-a</h4>
+        <input type="text" v-model='u' />
+      </div>
+      `,
+      // props来自父组件的，只能参与运算（this.count+1），不能直接修改(this.count++)。
+      // 不能把props直接绑定在v-model上，因为v-mode具有set功能。
+      props: {
+        value: { type: String, required: false, default: '' }
+      },
+      data() {
+        return { msg: 'aaa' }
+      },
+      computed: {
+        u: {
+          get() {
+            return this.value
+          },
+          set(newVal) {
+            // 自定义事件，在修改value
+            this.$emit('input', newVal)
+          }
+        }
+      },
+      mounted() {
+        console.log('$attrs', this.$attrs)
+        console.log('$listeners', this.$listeners)
+        // 调用触发父组件给的xyz这个方法，并同时回传一个数据
+        this.$listeners.xyz('hello app')
+      }
+    })
+
+    Vue.component('qf-child-b', {
+      template: `
+      <div class='b'>
+        <h4>qf-child-b</h4>
+        <h3 v-text='user'></h3>
+      </div>
+      `,
+      props: {
+        user: { type: String, required: false, default: ''}
+      },
+      methods: {
+        hi() {
+          console.log('bbb')
+        }
+      }
+    })
+
+    Vue.component('qf-child-c', {
+      template: `
+      <div class='c'>
+        <h4>qf-child-c</h4>
+        <div v-text='foo'></div>
+        <div v-text='foo2'></div>
+      </div>
+      `,
+      data() { return { name: 'ccc', foo: 'xx'} },
+      // inject: ['foo'],
+      inject: {
+        // 把注入的'foo'改名为'foo2'，避免和data中的foo重名（导致覆盖）
+        foo2: 'foo'
+      },
+      methods: { run() { console.log('run')} }
+    })
+
+    Vue.component('qf-child-d', {
+      template: `
+      <div class='d'>
+        <h4>qf-child-d</h4>
+        <input type="text" v-model='msg' />
+        <button @click='send'>发送</button>
+        <div v-html='content'></div>
+      </div>
+      `,
+      data() {
+        return {
+          msg: '',
+          content: ''
+        }
+      },
+      mounted() {
+        // 订阅监听ddd这个频道，当有消息时，触发回调函数
+        bus.$on('ddd', msg=>{
+          console.log('eee频道上有消息了：', msg)
+          this.content += `<div>小李说：${msg}</div>`
+        })
+      },
+      methods: {
+        send() {
+          // 向eee这个“频道”上发送一条消息
+          bus.$emit('eee', this.msg)
+          this.msg = ''
+        }
+      }
+    })
+
+    Vue.component('qf-child-e', {
+      template: `
+      <div class='e'>
+        <h4>qf-child-e</h4>
+        <input type="text" v-model='msg' />
+        <button @click='send'>发送</button>
+        <div v-html='content'></div>
+      </div>
+      `,
+      data() {
+        return {
+          content: '',
+          msg: ''
+        }
+      },
+      mounted() {
+        bus.$on('eee', msg=>{
+          console.log('eee频道上有消息了：', msg)
+          this.content += `<div>小王说：${msg}</div>`
+        })
+      },
+      methods: {
+        send() {
+          // 向ddd这个“频道”上发送一条消息
+          bus.$emit('ddd', this.msg)
+          this.msg = ''
+        }
+      }
+    })
+
+    // 创建一个事件总线（它不是Vue组件）
+    // 理解：主板上“南桥”与“北桥”的通信，那个总线翻译就叫"bus"。
+    // 两个重要方法：bus.$emit()发射消息  bus.$on()监听消息
+    var bus = new Vue()
+    var app = new Vue({
+      el: '#app',
+      data: {
+        user: '',
+        msg: 'hello children'
+      },
+      // provide: {
+      //   foo: 'hello children'
+      // },
+      provide() {
+        // do somethine
+        return {
+          foo: this.msg
+        }
+      },
+      mounted() {
+        console.log('msg', this.$children[0].msg)
+        this.$children[1].hi()
+      },
+      methods: {
+        handle(e) {
+          console.log('handle', e)
+        },
+        submit() {
+          // 一、测试ref访问DOM
+          // var data = document.getElementById('ipt').value
+          var data = this.$refs.in.value
+          console.log('提交', data)
+          // 二、测试ref访问自定义组件实例
+          // console.log('refs', this.$refs)
+          console.log('child-c name', this.$refs.c.name)
+          this.$refs.c.run()
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

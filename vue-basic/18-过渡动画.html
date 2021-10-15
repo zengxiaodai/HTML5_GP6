@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .yyy-enter-active,
+    .yyy-leave-active {
+      transition: all 2s;
+    }
+    .yyy-enter,
+    .yyy-leave-to {
+      opacity: 0;
+      color: red;
+    }
+    .yyy-enter-to,
+    .yyy-leave {
+      opacity: 1;
+      color: black;
+    }
+  </style>
+
+  <!-- animate.css官网：https://animate.style -->
+  <!-- rel="stylesheet"，不能省 -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- 第一种方式使用过渡动画的方式：要你自己编写符合用户体验的动画。 -->
+    <!-- .myname-enter {}
+    .myname-enter-active {}
+    .myname-enter-to {}
+    .myname-leave {}
+    .myname-leave-active {}
+    .myname-leave-to {} -->
+    <transition name='yyy'>
+      <h1 v-show='bol1'>测试过渡动画</h1>
+    </transition>
+    <button @click='toggle1'>显示/隐藏</button>
+    <hr>
+
+    <!-- 第二种方式使用animate.css这个动画库：不用自己编写动画了 -->
+    <transition
+      enter-active-class='animate__animated animate__flash'
+      leave-active-class='animate__animated animate__backOutDown'
+    >
+      <h1 v-if='bol2'>测试animate.css动画</h1>
+    </transition>
+    <button @click='toggle2'>显示/隐藏</button>
+    <hr>
+
+    <!-- 第三种方式使用过渡动画：给兄弟节点都加key，作用尽可能减少没有必要DOM操作 -->
+    <!-- 不加key动画不起作用，key是不能重复的 -->
+    <!-- mode 用于指定多个元素显示与隐藏的动画的模式 -->
+    <!-- mode='in-out' 要进来的先进来，要走的后走 -->
+    <!-- mode='out-in' 要走的先走，要进来的后来 -->
+    <transition
+      enter-active-class='animate__animated animate__fadeInDown'
+      leave-active-class='animate__animated animate__zoomOut'
+      mode='out-in'
+    >
+      <h1 key='1' v-if='idx===1'>我一行文字</h1>
+      <h1 key='2' v-else-if='idx===2'>我二行文字</h1>
+      <h1 key='5' v-else-if='idx===3'>我三行文字</h1>
+      <h1 key='9' v-else>我四行文字</h1>
+    </transition>
+    <button @click='toggle3'>显示/隐藏</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // Transition过渡动画
+    // 触发动画执行的常用条件：v-if / v-show 都可以触发过渡动画。
+    // 注意：动画结束时的样式不会保留，最终元素的样式取决默认模式或者class/style样式。
+    var app = new Vue({
+      el: '#app',
+      data: {
+        bol1: true,
+        bol2: true,
+        idx: 1
+      },
+      methods: {
+        toggle1() {
+          this.bol1 = !this.bol1
+        },
+        toggle2() {
+          this.bol2 = !this.bol2
+        },
+        toggle3() {
+          if(this.idx==4) {
+            this.idx = 1
+          }else{
+            this.idx++
+          }
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

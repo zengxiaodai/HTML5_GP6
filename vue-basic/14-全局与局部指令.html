@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <div v-myon:click='clickHandle'>
+      <button v-myon:click.stop='clickHandle'>点击</button>
+    </div>
+
+    <div v-myon:mouseenter='mouseHandle'>测试鼠标移入事件</div>
+    <hr>
+
+    <h1 v-color='"red"'>文字</h1>
+    <h1 v-color='color'>你好</h1>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 全局指令
+    // 作业：把Vue内置指令都自己实现一遍（DOM操作）。
+    // 特点：一次定义，在整个vue环境中都可以使用。
+
+    // 语法：第一个参数是指令的名字（不要加"v-"），第二个参数可是对象语法或function。
+    Vue.directive('myon', function(el, binding) {
+      console.log('el', el)
+      console.log('binding', binding)
+      // dom handle
+      const m = binding.modifiers
+      // dom handle
+      el.addEventListener(binding.arg, function(e) {
+        if(m.stop) e.stopPropagation()
+        if(m.prevent) e.preventDefult()
+        // 调用v-myon绑定那个methods方法
+        binding.value(e)
+      })
+    })
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        color: '#00ff00'
+      },
+      // 局部指令，只能在当前组件视图中使用，不能跨组件使用。
+      directives: {
+        'color': {
+          // 钩子函数
+          bind(el, binding) {
+            // 表达式的值的验证
+            console.log('el', el)
+            console.log('binding', binding)
+            // 大量的DOM操作
+            // do something
+            el.style.color = binding.value
+          }
+        }
+      },
+      methods: {
+        clickHandle(e) {
+          console.log('clicked', e)
+        },
+        mouseHandle(e) {
+          console.log('mouseenter', e)
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

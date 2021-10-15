@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <qf-list name='gp6-list'></qf-list>
+    <h1 v-color='"red"'>颜色</h1>
+    <h1>{{'556.89'|rmb}}</h1>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 编写Vue插件的两种语法：
+    // function QfPlugin(Vue) {}
+    var QfPlugin = {
+      install(Vue) {
+        Vue.component('qf-list', {
+          template: '<div v-text="name"></div>',
+          props: { name: String, required: false, default: 'qf-list'}
+        })
+        Vue.directive('color', function(el,binding){
+          el.style.color = binding.value
+        })
+        Vue.filter('rmb', function(val) {
+          return '￥'+val
+        })
+        Vue.mixin({methods:{init(){console.log('init')}}})
+        Vue.prototype.$fetch = function(url, methods) {
+          console.log('使用$fetch方法调接口')
+        }
+      }
+    }
+
+    // 插件开发（造轮子）
+    // Vue.use()表示注册、使用第三方插件
+    Vue.use(QfPlugin)
+
+    var app = new Vue({
+      el: '#app',
+      mounted() {
+        this.init()
+        this.$fetch()
+      }
+    })
+  </script>
+
+</body>
+</html>

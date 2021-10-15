@@ -1,0 +1,33 @@
+<view class="shop">
+
+<!-- 位置显示 -->
+<view class="header" style="padding-top: {{disPad+'px'}}">
+    <view class="pos">
+        <image src='/assets/icon/dis.png' />
+        <text wx:if="{{pos.latitude}}">{{street}} ></text>
+        <!-- 当小程序启动时，用户拒绝了位置授权（这是永久性操作） -->
+        <!-- 在小程序中，需要使用 button 这个表单，来触发打开微信内置的授权页面 -->
+        <button wx:else open-type="openSetting">北京 ></button>
+    </view>
+</view>
+
+<!-- 店铺列表 -->
+<view class="shop-list">
+    <view 
+        class="shopx" 
+        wx:for="{{list}}" 
+        wx:key="*this"
+        data-item="{{item}}"
+        bindtap="skipToDetail"
+    >
+        <view class="left">
+            <image src='/assets/b.png' />
+        </view>
+        <view class="right">
+            <view class="name">{{item.shop_name}}</view>
+            <view class="dis">{{item.dis+'米'}}</view>
+        </view>
+    </view>
+</view>
+
+</view>
